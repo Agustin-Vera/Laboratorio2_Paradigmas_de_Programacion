@@ -32,6 +32,11 @@ uniqueOptions(Options) :-
     getOptionsCodes(Options, OptionsCodes),
     codeExist(OptionsCodes).
 
+% Verifica si una option existe en una lista de options
+optionExist(Options, NewOption) :-
+    getOptionsCodes(Options, OptionsCodes),
+    getOptionCode(NewOption, NewOptionCode),
+    not(member(NewOptionCode, OptionsCodes)).
 
 % Otros predicados
 
