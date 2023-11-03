@@ -1,4 +1,3 @@
-
 %#################################################################
 %             TDA Flow
 %#################################################################
@@ -13,6 +12,8 @@ Predicados:
     flowIdExist(IdsList) (aridad = 1)
     setFlowOptions(Flow, NewOptions, NewFlow) (aridad = 3)
     addOptionToOptions(FlowOptions, Option, NewFlowOptions) (aridad = 3)
+    myMember(List, Elemento) (aridad = 2)
+    flowExist(Flows, NewFlow) (aridad = 2)
 
 Metas primarias:
     
@@ -68,6 +69,21 @@ flowIdExist([]).
 flowIdExist([Id|Resto]) :-
     not(member(Id, Resto)),
     flowIdExist(Resto).
+
+% Dominio: List - Elemento
+% Descripcion: Verifica si un Elemento esta dentro de una Lista
+% Tipo de algoritmo: Recursion de cola
+myMember([Elemento|_], Elemento) :- !.
+myMember([_|Resto], Elemento) :-
+    myMember(Resto, Elemento), !.
+
+% Dominio: FlowList - Flow
+% Descripcion: Verifica si un flow existe en una lista de flows
+% Tipo de algoritmo: Recursion de cola
+flowExist(Flows, NewFlow) :-
+    getFlowsIDs(Flows, FlowsIDs),
+    getFlowID(NewFlow, NewFlowID),
+    not(myMember(FlowsIDs, NewFlowID)).
 
 %#################################################################
 %             Modificadores
