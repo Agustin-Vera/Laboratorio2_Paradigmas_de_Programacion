@@ -10,6 +10,11 @@ Predicados:
     getChatbotStartFlowID(Chatbot, StartFlowID) (aridad = 2)
     setChatbotFlows(Chatbot, NewFlows, NewChatbot) (aridad = 3)
     addFlowToFlows(FlowList, Flow, FlowList) (aridad = 3)
+    uniqueChatbots(Chatbots) (aridad = 1)
+    getChatbotsIDs(ChatbotList, IdList) (aridad = 2)
+    chatbotIdExist(IdList) (aridad 2)
+    isInitialChatbot(Chatbot, InitialChatbotCodeLink, InitialFlowID) (aridad = 3)
+    getStartFlowIDByInitialChatbots(ChatbotList, InitialChatbotID, InitialFlowID) (aridad  = 3)
 
 Metas primarias:
 
@@ -43,6 +48,51 @@ getChatbotFlows([_, _, _, _, Flows], Flows).
 % Tipo de algoritmo: N/A
 getChatbotStartFlowID([_, _, _, StartFlowID, _], StartFlowID).
 
+% Dominio: ChatbotList - IdList
+% Descripcion: Obtiene todos los ID de los Chatbots dentro de una lista de Chatbots
+% Tipo de algoritmo: 
+getChatbotsIDs([], []).
+getChatbotsIDs([Chatbot|Resto], [Id|Resultado]) :-
+    getChatbotID(Chatbot, Id),
+    getChatbotsIDs(Resto, Resultado), !.
+
+% Dominio: Chatbot - int - int
+% Descripcion: Verifica si un Chatbot corresponde al Chatbot asociado a el InitialChatbotCodeLink
+% Tipo de algoritmo: N/A
+isInitialChatbot(Chatbot, InitialChatbotCodeLink, InitialFlowID) :-
+    getChatbotID(Chatbot, ChatbotID),
+    ChatbotID == InitialChatbotCodeLink,
+    getChatbotStartFlowID(Chatbot, InitialFlowID).
+
+% getStartFlowIDByInitialChatbot(Chatbots, ChatbotID, InitialFlowID) :-
+% Dominio: ChatbotList - int - int
+% Descripcion: Obtiene el IntialFlowID dada una lista de Chatbots y un InitialChatbotID
+% Tipo de algoritmo:
+getStartFlowIDByInitialChatbots([], _, []).
+getStartFlowIDByInitialChatbots([Chatbot|_], InitialChatbotID, InitialFlowID) :-
+    isInitialChatbot(Chatbot, InitialChatbotID, InitialFlowID), !.
+getStartFlowIDByInitialChatbots([_|Resto], InitialChatbotID, InitialFlowID) :-
+    getStartFlowIDByInitialChatbots(Resto, InitialChatbotID, InitialFlowID).
+
+%#################################################################
+%             Pertenencias
+%#################################################################
+
+% Verifica si hay un ID repetido en una lista de chatbots
+% Dominio: ChatbotList
+% Descripcion: Verifica si hay un Chatbot repetido en una lista de Chatbots
+% Tipo de algoritmo: N/A
+uniqueChatbots(Chatbots) :-
+    getChatbotsIDs(Chatbots, ChatbotsIDs),
+    chatbotIdExist(ChatbotsIDs).
+
+% Dominio: IdList
+% Descripcion: Verifica si hay un ID repetido en una lista de IDs
+% Tipo de algoritmo:
+chatbotIdExist([]).
+chatbotIdExist([Id|Resto]) :-
+    not(member(Id, Resto)),
+    chatbotIdExist(Resto).
 %#################################################################
 %             Modificadores
 %#################################################################
