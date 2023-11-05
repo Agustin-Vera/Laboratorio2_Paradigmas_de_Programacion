@@ -93,6 +93,16 @@ chatbotIdExist([]).
 chatbotIdExist([Id|Resto]) :-
     not(member(Id, Resto)),
     chatbotIdExist(Resto).
+
+% Dominio: ChatbotList - Chatbot
+% Descripcion: Verifica si un Chatbot existe en una lista de Chatbots
+% Tipo de algoritmo: N/A
+% Recorrido: boolean
+chatbotExist(Chatbots, NewChatbot) :-
+    getChatbotsIDs(Chatbots, ChatbotsIDs),
+    getChatbotID(NewChatbot, NewChatbotID),
+    not(member(NewChatbotID, ChatbotsIDs)).
+
 %#################################################################
 %             Modificadores
 %#################################################################
