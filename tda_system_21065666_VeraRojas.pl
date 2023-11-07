@@ -86,6 +86,14 @@ setSystemChatbots(System, NewChatbots, NewSystem) :-
     system(Name, InitialChatbotCodeLink, _, Users, ChatHistorys, CurrentChatbotID, CurrentFlowID, Date, System),
     system(Name, InitialChatbotCodeLink, NewChatbots, Users, ChatHistorys, CurrentChatbotID, CurrentFlowID, Date, NewSystem).
 
+setSystemUsers(System, NewUsers, NewSystem) :-
+    system(Name, InitialChatbotCodeLink, Chatbots, _, ChatHistorys, CurrentChatbotID, CurrentFlowID, Date, System),
+    system(Name, InitialChatbotCodeLink, Chatbots, NewUsers, ChatHistorys, CurrentChatbotID, CurrentFlowID, Date, NewSystem).
+
+setSystemChatHistorys(System, NewChatHistorys, NewSystem) :-
+    system(Name, InitialChatbotCodeLink, Chatbots, Users, _, CurrentChatbotID, CurrentFlowID, Date, System),
+    system(Name, InitialChatbotCodeLink, Chatbots, Users, NewChatHistorys, CurrentChatbotID, CurrentFlowID, Date, NewSystem).
+
 % ------------------------------ Otros predicados ------------------------------
 
 % Dominio: ChatbotList - Chatbot - ChatbotList
@@ -94,3 +102,9 @@ setSystemChatbots(System, NewChatbots, NewSystem) :-
 % Recorrido: lits
 addChatbotToChatbots(SystemChatbots, Chatbot, NewSystemChatbots) :-
     append(SystemChatbots, [Chatbot], NewSystemChatbots).
+
+addUserToUsers(SystemUsers, User, NewSystemUsers) :-
+    append(SystemUsers, [User], NewSystemUsers).
+
+addChatHistoryToChatHistorys(SystemChatHistorys, ChatHistory, NewSystemChatHistorys) :-
+    append(SystemChatHistorys, [ChatHistory], NewSystemChatHistorys).

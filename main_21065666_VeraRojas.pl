@@ -2,6 +2,8 @@
 :-include(tda_flow_21065666_VeraRojas).
 :-include(tda_chatbot_21065666_VeraRojas).
 :-include(tda_system_21065666_VeraRojas).
+:-include(tda_user_21065666_VeraRojas).
+:-include(tda_chathistory_21065666_VeraRojas).
 
 %#################################################################
 %             Main
@@ -105,6 +107,20 @@ systemAddChatbot(System, Chatbot, NewSystem) :-
     setSystemChatbots(NewSystemWithStartFlowID, NewSystemChatbots, NewSystem), !.
 systemAddChatbot(System, _, System).
 
+
+% RF 9 - TDA System - Modificador
+systemAddUser(System, User, NewSystem) :-
+    getSystemUsers(System, SystemUsers),
+    not(userExist(SystemUsers, User)),
+    user(User, 0, NewUser),
+    getSystemChatHistorys(System, SystemChatHistorys),
+    chatHistory(User, "", NewChatHistory),
+    addUserToUsers(SystemUsers, NewUser, NewUsers),
+    addChatHistoryToChatHistorys(SystemChatHistorys, NewChatHistory, NewChatHistorys),
+    setSystemUsers(System, NewUsers, NewSystemUsers),
+    setSystemChatHistorys(NewSystemUsers, NewChatHistorys, NewSystem), !.
+systemAddUser(System, _, System).
+
 /*
 set_prolog_flag(answer_write_options,[max_depth(0)]).
 option(1, "1) Viajar", 1, 1, ["viajar", "turistear", "conocer"], O1), 
@@ -114,5 +130,6 @@ flowAddOption(F10, O2, F11),
 chatbot(0, "Asistente", "Bienvenido\n¿Que te gustaria hacer?", 1, [], CB0),
 chatbotAddFlow(CB0, F11, CB01),
 system("Chatbots Paradigmas", 0, [], S0),
-systemAddChatbot(S0, CB01, S1).
+systemAddChatbot(S0, CB01, S1),
+systemAddUser(S1, "User1", S2).
 */
