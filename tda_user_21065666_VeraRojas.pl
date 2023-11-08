@@ -20,7 +20,13 @@ getUsersStatus([],[]).
 getUsersStatus([User|Resto], [Status|Resultado]) :-
     getUserStatus(User, Status),
     getUsersStatus(Resto, Resultado), !.
-    
+
+getUserLogged([], []).
+getUserLogged([User|_], User) :-
+    member(1, User), !.
+getUserLogged([_|Resto], Resultado) :-
+    getUserLogged(Resto, Resultado).
+
 % Pertenecias
 
 % verifica si un user existe en una lista de users

@@ -12,5 +12,6 @@ chatbotAddFlow(CB0, F11, CB01),
 system("Chatbots Paradigmas", 0, [], S0),
 systemAddChatbot(S0, CB01, S1),
 systemAddUser(S1, "User1", S2),
-systemLogin(S2, "USER1", S3).
+systemLogin(S2, "USER1", S3),
+systemLogout(S3, S4).
 */

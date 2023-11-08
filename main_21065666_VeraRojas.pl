@@ -129,3 +129,13 @@ systemLogin(System, User, NewSystem) :-
     changeUsersStatus(SystemUsers, User, 1, NewSystemUsers),
     setSystemUsers(System, NewSystemUsers, NewSystem), !.
 systemLogin(System, _, System).
+
+%RF 11 % TDA System
+systemLogout(System, NewSystem) :-
+    getSystemUsers(System, SystemUsers),
+    usersLogged(SystemUsers),
+    getUserLogged(SystemUsers, LoggedUser),
+    getUserName(LoggedUser, LoggedUsername),
+    changeUsersStatus(SystemUsers, LoggedUsername, 0, NewSystemUsers),
+    setSystemUsers(System, NewSystemUsers, NewSystem), !.
+systemLogout(System, System).
