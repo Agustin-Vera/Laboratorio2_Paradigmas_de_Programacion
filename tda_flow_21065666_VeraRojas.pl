@@ -1,7 +1,7 @@
 %#################################################################
 %             TDA Flow
 %#################################################################
-
+% Representacion: Id X NameMsg X Options
 /*
 Predicados:
     getFlowOptions(Flow, Options) (aridad = 2)
@@ -21,43 +21,50 @@ Metas secuandarias:
     
 */
 
-% Constructor
-%newFlow(Id, NameMsg, Option, [Id, NameMsg, Option]).
 
-%#################################################################
-%             Selectores
-%#################################################################
+% ------------------------------ Selectores ------------------------------------
 
-% Dominio: Flow - OptionList
+% Dominio: Flow X OptionList
 % Descripcion: Obtiene las Options del Flow
-% Tipo de algoritmo:
+% Tipo de algoritmo: N/A
+% Recorrido: list
 getFlowOptions([_, _, Options], Options).
 
-% Dominio: Flow - int
+% Dominio: Flow X int
 % Descripcion: Obtiene el ID del Flow
-% Tipo de algoritmo:
+% Tipo de algoritmo: N/A
+% Recorrido: int
 getFlowID([Id, _, _], Id).
 
-% Dominio: Flow - string
+% Dominio: Flow X string
 % Descripcion: Obtiene el NameMsg dek Flow
-% Tipo de algoritmo:
+% Tipo de algoritmo: N/A
+% Recorrido: String
 getFlowNameMsg([_, NameMsg, _], NameMsg).
 
-% Dominio: FlowList - IdList
+% Dominio: FlowList X IdList
 % Descripcion: Obtiene todos los IDs de una lista de Flows
-% Tipo de algoritmo:
+% Tipo de algoritmo: Recursion de cola
+% Recorrido: list
 getFlowsIDs([], []).
 getFlowsIDs([Flow|Resto], [Id|Resultado]) :-
     getFlowID(Flow, Id),
     getFlowsIDs(Resto, Resultado), !.
 
-%#################################################################
-%             Pertenencias
-%#################################################################
+% Obtiene un flow dado su ID y una lista de flows
+% getFlowByID(CurrentChatbotFlows, CurrentFlowID, CurrentFlow),
+getFlowByID([], _, []).
+getFlowByID([Flow|_], FlowID, Flow) :-
+    getFlowID(Flow, FlowID), !.
+getFlowByID([_|Resto], FlowID, Resultado) :-
+    getFlowByID(Resto, FlowID, Resultado), !.
+
+% ------------------------------ Pertenencias ----------------------------------
 
 % Dominio: FlowList
 % Descripcion: Verifica si una lista posee Flows unicos
-% Tipo de algoritmo:
+% Tipo de algoritmo: N/A
+% Recorrido: boolean
 uniqueFlows(Flows) :-
     getFlowsIDs(Flows, FlowsIDs),
     flowIdExist(FlowsIDs).
@@ -65,43 +72,44 @@ uniqueFlows(Flows) :-
 % Dominio: IdList
 % Descripcion: Verifica si una lista posee IDs unicos
 % Tipo de algoritmo: N/A
+% Recorrido: boolean
 flowIdExist([]).
 flowIdExist([Id|Resto]) :-
     not(member(Id, Resto)),
     flowIdExist(Resto).
 
-% Dominio: List - Elemento
+% Dominio: List X Elemento
 % Descripcion: Verifica si un Elemento esta dentro de una Lista
 % Tipo de algoritmo: Recursion de cola
+% Recorrido: boolean
 myMember([Elemento|_], Elemento) :- !.
 myMember([_|Resto], Elemento) :-
     myMember(Resto, Elemento), !.
 
-% Dominio: FlowList - Flow
+% Dominio: FlowList X Flow
 % Descripcion: Verifica si un flow existe en una lista de flows
 % Tipo de algoritmo: Recursion de cola
+% Recorrido: boolean
 flowExist(Flows, NewFlow) :-
     getFlowsIDs(Flows, FlowsIDs),
     getFlowID(NewFlow, NewFlowID),
     not(myMember(FlowsIDs, NewFlowID)).
 
-%#################################################################
-%             Modificadores
-%#################################################################
+% ------------------------------ Modificadores ---------------------------------
 
-% Dominio: Flow - OptionList - Flow
+% Dominio: Flow X OptionList X Flow
 % Descripcion: Modifica la lista de Options de un Flow
 % Tipo de algoritmo: 
+% Recorrido: Flow
 setFlowOptions(Flow, NewOptions, NewFlow) :-
     flow(Id, NameMsg, _, Flow),
     flow(Id, NameMsg, NewOptions, NewFlow).
 
-%#################################################################
-%             Otros predicados
-%#################################################################
+% ------------------------------ Otros predicados ------------------------------
 
-% Dominio: OptionList - Option - OptionList
+% Dominio: OptionList X Option X OptionList
 % Descripcion: Agrega una Option a una lista de Options
 % Tipo de algoritmo: N/A
+% Recorrido: list
 addOptionToOptions(FlowOptions, Option, NewFlowOptions) :-
     append(FlowOptions, [Option], NewFlowOptions).
