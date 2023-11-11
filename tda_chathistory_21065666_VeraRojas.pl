@@ -24,6 +24,13 @@ chatHistory(Username, History, [UsernameLower, History]) :-
 getChathistoryUser([Username, _], Username).
 getChathistoryHistory([_, History], History).
 
+getHistoryByUsername([], _, []).
+getHistoryByUsername([ChatHistory|_], Username, ChatHistory) :-
+    string_lower(Username, LowerUsername),
+    getChathistoryUser(ChatHistory, LowerUsername), !.
+getHistoryByUsername([_|Resto], Username, Resultado) :-
+    getHistoryByUsername(Resto, Username, Resultado).
+
 % Modificadores
 
 % changeChathistorys(SystemChatHistorys, User, NewInteraction, NewSystemChatHistorys)

@@ -173,3 +173,9 @@ systemTalkRec(System, Message, NewSystem) :-
     getSystemChatHistorys(System, SystemChatHistorys),
     changeChathistorys(SystemChatHistorys, User, NewInteraction, NewSystemChatHistorys),
     setSystemChathistorysAndCurrentFlowAndChatbotIDs(System, NewCurrentFlowID, NewCurrentChatbotID, NewSystemChatHistorys, NewSystem), !.
+
+    % RF 13 
+systemSynthesis(System, User, History) :-
+    getSystemChatHistorys(System, SystemChatHistorys),
+    getHistoryByUsername(SystemChatHistorys, User, ChatHistory),
+    getChathistoryHistory(ChatHistory, History).

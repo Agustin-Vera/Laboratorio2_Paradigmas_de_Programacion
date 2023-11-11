@@ -15,7 +15,9 @@ systemAddUser(S1, "User1", S2),
 systemLogin(S2, "USER1", S3),
 systemLogout(S3, S4),
 systemLogin(S4, "USER1", S5),
-systemTalkRec(S5, "Hola", S6).
+systemTalkRec(S5, "Hola", S6),
+systemSynthesis(S6, "User2", History),
+write(History).
 */
 
 
