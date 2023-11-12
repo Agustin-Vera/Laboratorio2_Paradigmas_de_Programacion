@@ -79,7 +79,7 @@ getOptionsCodes([Option|Resto], [Code|Resultado]) :-
 
 % Dominio: List(Option) X String X Option
 % Descripcion: Obtiene una option dada una lista de options y un Message que puede ser un numero o una keyword
-% Tipo de algoritmo: Recursion
+% Tipo de algoritmo: Recursion cola
 % Recorrido: Option
 getOptionByMessage([Option|_], Message, Option) :-
     number_string(ID, Message),

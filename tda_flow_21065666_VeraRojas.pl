@@ -74,7 +74,7 @@ uniqueFlows(Flows) :-
 
 % Dominio: List(int)
 % Descripcion: Verifica si una lista posee IDs unicos
-% Tipo de algoritmo: N/A
+% Tipo de algoritmo: Recursion de cola
 % Recorrido: boolean
 flowIdExist([]).
 flowIdExist([Id|Resto]) :-
@@ -91,7 +91,7 @@ myMember([_|Resto], Elemento) :-
 
 % Dominio: List(Flow) X Flow
 % Descripcion: Verifica si un flow existe en una lista de flows
-% Tipo de algoritmo: Recursion de cola
+% Tipo de algoritmo: N/A
 % Recorrido: boolean
 flowExist(Flows, NewFlow) :-
     getFlowsIDs(Flows, FlowsIDs),

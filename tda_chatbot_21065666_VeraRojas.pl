@@ -53,7 +53,7 @@ getChatbotStartFlowID([_, _, _, StartFlowID, _], StartFlowID).
 
 % Dominio: List(Chatbot) X List(int)
 % Descripcion: Obtiene todos los ID de los Chatbots dentro de una lista de Chatbots
-% Tipo de algoritmo: N/A
+% Tipo de algoritmo: Recursion de cola
 % Recorrido: List(int)
 getChatbotsIDs([], []).
 getChatbotsIDs([Chatbot|Resto], [Id|Resultado]) :-
@@ -66,8 +66,8 @@ getChatbotsIDs([Chatbot|Resto], [Id|Resultado]) :-
 % Recorrido: int
 getStartFlowIDByInitialChatbots([Chatbot|_], InitialChatbotID, _, InitialFlowID) :-
     isInitialChatbot(Chatbot, InitialChatbotID, InitialFlowID), !.
-getStartFlowIDByInitialChatbots([_|Resto], InitialChatbotID, _, InitialFlowID) :-
-    getStartFlowIDByInitialChatbots(Resto, InitialChatbotID, _, InitialFlowID), !.
+getStartFlowIDByInitialChatbots([_|Resto], InitialChatbotID, CurrentFlowID, InitialFlowID) :-
+    getStartFlowIDByInitialChatbots(Resto, InitialChatbotID, CurrentFlowID, InitialFlowID), !.
 getStartFlowIDByInitialChatbots(_, _, CurrentFlowID, CurrentFlowID).
 
 % Dominio: List(Chatbot) X int X Chatbot
@@ -92,7 +92,7 @@ uniqueChatbots(Chatbots) :-
 
 % Dominio: List(int)
 % Descripcion: Verifica si hay un ID repetido en una lista de IDs
-% Tipo de algoritmo: N/A
+% Tipo de algoritmo: Recursion de cola
 % Recorrido: boolean
 chatbotIdExist([]).
 chatbotIdExist([Id|Resto]) :-

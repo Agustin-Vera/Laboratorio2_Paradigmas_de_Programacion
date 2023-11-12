@@ -103,7 +103,7 @@ changeUserStatus(User, Status, UpdatedUser) :-
 
 % Dominio: List(User) X String X int X List(User)
 % Descripcion: Dada una lista de User cambia el Status del User con nombre Username 
-% Tipo de algoritmo: N/A
+% Tipo de algoritmo: Recursion de cola
 % Recorrido: List(User)
 changeUsersStatus([], _, _, []).
 changeUsersStatus([User|Resto], Username, Status, [UserLogged|Resto]) :-

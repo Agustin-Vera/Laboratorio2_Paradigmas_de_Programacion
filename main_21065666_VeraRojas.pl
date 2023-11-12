@@ -36,11 +36,6 @@ Metas secuandarias:
     setSystemChathistorysAndCurrentFlowAndChatbotIDs, getHistoryByUsername, getChathistoryHistory
 */
 
-% Dominio:
-% Descripcion:
-% Tipo de algoritmo:
-% Recorrido: 
-
 % RF 2 - TDA Option - Constructor
 % Dominio: int X string X int X int X List(String) X Option
 % Descripcion: Crea una Option
