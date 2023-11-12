@@ -1,7 +1,7 @@
 %#################################################################
 %             TDA User
 %#################################################################
-% Representacion: Name X Status
+% Representacion: Name(String) X Status(int)
 /*
 Predicados:
     user(Name, Status, [Username, Status]) (aridad = 3)
@@ -16,16 +16,17 @@ Predicados:
     changeUsersStatus([User|Resto], Username, Status, [UserLogged|Resto]) (aridad = 4)
 
 Metas primarias:
-
+    user, getUsersIDs, userExist, usersLogged, changeUsersStatus
 Metas secuandarias:
-    
+    getUserName, getUserStatus, changeUserStatus, getUserLogged, getUsersStatus
 */
+
 % ------------------------------ Constructor -----------------------------------
 
-% Dominio:
-% Descripcion:
-% Tipo de algoritmo:
-% Recorrido: 
+% Dominio: String X int X User
+% Descripcion: Crea un User
+% Tipo de algoritmo: N/A
+% Recorrido: User
 user(Name, Status, [Username, Status]) :-
     string_lower(Name, Username).
 
@@ -43,25 +44,25 @@ getUserName([Name,_], Name).
 % Recorrido: int
 getUserStatus([_, Status], Status).
 
-% Dominio: UserList X UsernameList
+% Dominio: List(User) X List(String)
 % Descripcion: Dada una lista de Users obtiene todos los nombres de los Users
 % Tipo de algoritmo: Recursion de cola
-% Recorrido: list
+% Recorrido: List(String)
 getUsersIDs([], []).
 getUsersIDs([User|Resto], [Name|Resultado]) :-
     getUserName(User, Name),
     getUsersIDs(Resto, Resultado), !.
 
-% Dominio: UserList X UserStatusList
+% Dominio: List(User) X List(int)
 % Descripcion: Dada una lista de Users obtiene todos los status de los Users
 % Tipo de algoritmo: Recursion de cola
-% Recorrido: list
+% Recorrido: List(int)
 getUsersStatus([],[]).
 getUsersStatus([User|Resto], [Status|Resultado]) :-
     getUserStatus(User, Status),
     getUsersStatus(Resto, Resultado), !.
 
-% Dominio: UserList X User
+% Dominio: List(User) X User
 % Descripcion: Dada una lista de User obtiene al User con sesion iniciada
 % Tipo de algoritmo: Recursion de cola
 % Recorrido: User
@@ -73,7 +74,7 @@ getUserLogged([_|Resto], Resultado) :-
 
 % ------------------------------ Pertenencias ----------------------------------
 
-% Dominio: UserList X String
+% Dominio: List(User) X String
 % Descripcion: Verifica si un User existe dentro de una lista de Users
 % Tipo de algoritmo: N/A
 % Recorrido: boolean
@@ -82,8 +83,8 @@ userExist(Users, Username) :-
     string_lower(Username, NewUsername),
     member(NewUsername, UserNames).
 
-% Dominio: UserList
-% Descripcion: verifica si hay usuarios iniciados
+% Dominio: List(User)
+% Descripcion: Verifica si hay usuarios iniciados
 % Tipo de algoritmo: N/A
 % Recorrido: boolean
 usersLogged(Users) :-
@@ -100,10 +101,10 @@ changeUserStatus(User, Status, UpdatedUser) :-
     getUserName(User, Name),
     user(Name, Status, UpdatedUser).
 
-% Dominio: UserList X String X int X UserList
+% Dominio: List(User) X String X int X List(User)
 % Descripcion: Dada una lista de User cambia el Status del User con nombre Username 
 % Tipo de algoritmo: N/A
-% Recorrido: list
+% Recorrido: List(User)
 changeUsersStatus([], _, _, []).
 changeUsersStatus([User|Resto], Username, Status, [UserLogged|Resto]) :-
     string_lower(Username, UsernameLower),

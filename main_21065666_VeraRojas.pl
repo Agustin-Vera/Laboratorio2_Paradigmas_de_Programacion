@@ -22,14 +22,18 @@ Predicados:
     systemAddUser(System, User, NewSystem) (aridad = 3)
     systemLogin(System, User, NewSystem) (aridad = 3)
     systemLogout(System, NewSystem) (aridad = 2)
+    systemTalkRec(System, Message, NewSystem) (aridad = 3)
 
 Metas primarias:
-    option, flow, flowAddOption, chatbot, chatbotAddFlow, system, systemAddChatbot, systemAddUser, systemLogin, systemLogout
+    option, flow, flowAddOption, chatbot, chatbotAddFlow, system, systemAddChatbot, systemAddUser, systemLogin, systemLogout,systemTalkRec, systemSynthesis
+
 Metas secuandarias:
     keywordsToLowerKeywords, uniqueOptions, getFlowOptions, optionExist, addOptionToOptions, setFlowOptions, uniqueFlows, getChatbotFlows, flowExist,
     addFlowToFlows, setChatbotFlows, uniqueChatbots, getStartFlowIDByInitialChatbots, getSystemChatbots, chatbotExist, getSystemInitialChatbotCodeLink,
     addChatbotToChatbots, setSystemStartFlowID, setSystemChatbots, getSystemUsers, userExist, user, getSystemChatHistorys, chatHistory, addUserToUsers,
-    addChatHistoryToChatHistorys, setSystemUsers, setSystemChatHistorys, usersLogged, changeUsersStatus, getUserLogged, getUserName, 
+    addChatHistoryToChatHistorys, setSystemUsers, setSystemChatHistorys, usersLogged, changeUsersStatus, getUserLogged, getUserName, getSystemCurrentFlowID,
+    getSystemCurrentChatbotID, getChatbotByID, getFlowByID, getChatbotAndFlowCodeLinksByMessage, makeNewInteraction, makeNewInteraction, changeChathistorys,
+    setSystemChathistorysAndCurrentFlowAndChatbotIDs, getHistoryByUsername, getChathistoryHistory
 */
 
 % Dominio:
@@ -38,7 +42,7 @@ Metas secuandarias:
 % Recorrido: 
 
 % RF 2 - TDA Option - Constructor
-% Dominio: int X string X int X int X list X Option
+% Dominio: int X string X int X int X List(String) X Option
 % Descripcion: Crea una Option
 % Tipo de algoritmo: N/A
 % Recorrido: Option
@@ -46,7 +50,7 @@ option(Code, Message, ChatbotCodeLink, InitialFlowCodeLink, Keyword, [Code, Mess
     keywordsToLowerKeywords(Keyword, LowerKeywords).
 
 % RF 3 - TDA Flow - Constructor
-% Dominio: int X string X OptionList X Flow
+% Dominio: int X string X List(Option) X Flow
 % Descripcion: Crea un Flow
 % Tipo de algoritmo: N/A
 % Recorrido: Flow
@@ -65,7 +69,7 @@ flowAddOption(Flow, Option, NewFlow) :-
     setFlowOptions(Flow, NewFlowOptions, NewFlow), !.
 
 % RF 5 - TDA Chatbot - Constructor
-% Dominio: int X string X string X int X FlowList X Chatbot
+% Dominio: int X string X string X int X List(Flow) X Chatbot
 % Descripcion: Crea un Chatbot
 % Tipo de algoritmo: N/A
 % Recorrido: Chatbot
@@ -84,13 +88,13 @@ chatbotAddFlow(Chatbot, Flow, NewChatbot) :-
     setChatbotFlows(Chatbot, NewChatbotFlows, NewChatbot), !.
 
 % RF 7 - TDA System - Constructor
-% Dominio: String X int X ChatbotList X System
+% Dominio: String X int X List(Chatbot) X System
 % Descripcion: Crea un System
 % Tipo de algoritmo: N/A
 % Recorrido: System
 system(Name, InitialChatbotCodeLink, Chatbots, [Name, InitialChatbotCodeLink, Chatbots, [], [], InitialChatbotCodeLink, InitialFlowID, Time]) :-
     uniqueChatbots(Chatbots),
-    getStartFlowIDByInitialChatbots(Chatbots, InitialChatbotCodeLink, InitialFlowID),
+    getStartFlowIDByInitialChatbots(Chatbots, InitialChatbotCodeLink, [], InitialFlowID),
     get_time(TimeStamp),
     number_string(TimeStamp, Time).
 
@@ -103,7 +107,8 @@ systemAddChatbot(System, Chatbot, NewSystem) :-
     getSystemChatbots(System, SystemChatbots),
     chatbotExist(SystemChatbots, Chatbot),
     getSystemInitialChatbotCodeLink(System, InitialChatbotCodeLink),
-    getStartFlowIDByInitialChatbots([Chatbot], InitialChatbotCodeLink, InitialFlowID),
+    getSystemCurrentFlowID(System, CurrentFlowID),
+    getStartFlowIDByInitialChatbots([Chatbot], InitialChatbotCodeLink, CurrentFlowID, InitialFlowID),
     addChatbotToChatbots(SystemChatbots, Chatbot, NewSystemChatbots),
     setSystemStartFlowID(System, InitialFlowID, NewSystemWithStartFlowID),
     setSystemChatbots(NewSystemWithStartFlowID, NewSystemChatbots, NewSystem), !.
@@ -136,7 +141,7 @@ systemLogin(System, User, NewSystem) :-
     changeUsersStatus(SystemUsers, User, 1, NewSystemUsers),
     setSystemUsers(System, NewSystemUsers, NewSystem), !.
 
-%RF 11 % TDA System
+%RF 11 - TDA System
 % Dominio: System X System
 % Descripcion: Cierra la sesion de un User dentro de un System
 % Tipo de algoritmo: N/A
@@ -149,7 +154,7 @@ systemLogout(System, NewSystem) :-
     changeUsersStatus(SystemUsers, LoggedUsername, 0, NewSystemUsers),
     setSystemUsers(System, NewSystemUsers, NewSystem), !.
 
-% RF 12 % 
+% RF 12 - TDA System
 % Dominio: System X Message X System
 % Descripcion: Permite al User interactuar con un Chatbot
 % Tipo de algoritmo: N/A
@@ -169,12 +174,16 @@ systemTalkRec(System, Message, NewSystem) :-
     getChatbotByID(SystemChatbots, NewCurrentChatbotID, NewCurrentChatbot),
     getChatbotFlows(NewCurrentChatbot, NewCurrentChatbotFlows),
     getFlowByID(NewCurrentChatbotFlows, NewCurrentFlowID, NewCurrentFlow),
-    makeNewInteraction(NewCurrentChatbot, NewCurrentFlow, User, Message, NewInteraction),   % lista, creo  % ################################### hasta aqui realizado ##################################
+    makeNewInteraction(NewCurrentChatbot, NewCurrentFlow, User, Message, NewInteraction),
     getSystemChatHistorys(System, SystemChatHistorys),
     changeChathistorys(SystemChatHistorys, User, NewInteraction, NewSystemChatHistorys),
     setSystemChathistorysAndCurrentFlowAndChatbotIDs(System, NewCurrentFlowID, NewCurrentChatbotID, NewSystemChatHistorys, NewSystem), !.
 
-    % RF 13 
+% RF 13 - TDA System 
+% Dominio: System X User X String
+% Descripcion: Obtiene el Historial de interacciones de un usuario y el sistema
+% Tipo de algoritmo: N/A
+% Recorrido: String
 systemSynthesis(System, User, History) :-
     getSystemChatHistorys(System, SystemChatHistorys),
     getHistoryByUsername(SystemChatHistorys, User, ChatHistory),
