@@ -1,0 +1,41 @@
+Generales:
+  El programa es case insensitive como es pedido, "Museo" es igual a "MuSEo".
+
+
+Respecto al RF 12 SystemTalkRec:
+  Este requerimiento quedo implementado siguiendo lo pedido en la penultima modificacion del enunciado, es decir,
+  el requerimiento al recibir un string (realizar una interaccion) que no sea un keyword, entregara una respuesta
+  y no se caera. Este requerimiento se caera solo cuando se intente realizar una interaccion y no exista ningun
+  usuario iniciado en el sistema.
+
+
+Respecto al RF 13 SystemSynthesis , en el script de pruebas:
+  A la hora de realizar la consulta en el IDE Swi-Prolog, no se puede visualizar el contenido de systemSynthesis con write
+  debido a que la consula (para las consultas) del IDE no muestra todo el contenido de las respuestas, asumo que pasa por
+  la longitud de la consulta, sin embargo, le puse lo minimo que necesita para realizar una interación (el ejemplo en el script de pruebas)
+  y aun así no mostraba todo el contenido. Inclusive nisiquiera se ve la consulta realizada.
+
+  Probe con una consola aparte, por ejemplo: el CMD de windows y este si mostraba todo el contenido, inclusive el contenido del write que se obtuvo
+  desde systemSynthesis.
+
+  En caso de probar ahí, ejecutar: swipl nombreScriptPruebas.pl
+
+  Finalmente, aclarar que el RF 13 no posee errores, es solo que el IDE no muestra todo, pero para confirmar, si se puede apreciar que el IDE
+  entrega como respuesta la variable que almacena el string de SystemSynthesis, con ello, se puede confirmar que funciona correctamente.
+
+  Esto pasa por lo menos con la version de SWI Prolog que poseeo (9.0.4).
+
+
+Respecto a copiar y pegar los ejemplos de prueba con SWI Prolog:
+  File --> Edit ...
+  Si se abre el archivo de pruebas para "editar" con el IDE SWI Prolog este tendra problemas con los acentos, y se vera reflejado al copiar y un ejemplo y pegarlo en la consulta.
+  No me paso con ningun otro editor de texto, este es un error visual (el programa no se cae)
+  sin embargo, prefiero comentarlo, debido a que se siguio la misma logica que el script proporcionado por el profesor, el cual poseia los acentos correspondientes.
+
+
+Contenido de Listas a la hora de realizar consultas:
+  Para visualizar el contenido completo de las listas a la hora de realizar consultas ejecutar la siguiente consulta:
+
+    set_prolog_flag(answer_write_options,[max_depth(0)]).
+
+

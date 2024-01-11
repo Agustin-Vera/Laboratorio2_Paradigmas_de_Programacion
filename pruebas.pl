@@ -1,4 +1,4 @@
-:-include(main_21065666_VeraRojas).
+:-include(main).
 
 
 

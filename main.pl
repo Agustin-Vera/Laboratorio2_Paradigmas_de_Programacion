@@ -1,9 +1,9 @@
-:-include(tda_option_21065666_VeraRojas).
-:-include(tda_flow_21065666_VeraRojas).
-:-include(tda_chatbot_21065666_VeraRojas).
-:-include(tda_system_21065666_VeraRojas).
-:-include(tda_user_21065666_VeraRojas).
-:-include(tda_chathistory_21065666_VeraRojas).
+:-include(tda_option).
+:-include(tda_flow).
+:-include(tda_chatbot).
+:-include(tda_system).
+:-include(tda_user).
+:-include(tda_chathistory).
 
 %#################################################################
 %             Main
